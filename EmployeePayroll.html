@@ -216,6 +216,12 @@ background-color: green;
 flex-direction: column-reverse;
 align-items: flex-start;
 }
+error-output {
+    margin-left: 10px;
+    font-size: 12px;
+    font-style: italic;
+    color: red;
+}
 }
 </style>   
 </head>
@@ -230,11 +236,12 @@ align-items: flex-start;
         </div>
  </header>
 <div class="form-content">
-<form class="form" action="#" onsubmit="populateEmployeeData()">
+<form class="form" action="#" onreset="resetForm()" onsubmit="save();return false">
 <div class="form-head">Employee Payroll form </div>
 <div class="row-content">
 <label class="label text"for="name">Name</label>
 <input class="input" type="text" id="name" name="name" placeholder="Your name. ." required>
+<error-output class="text-error" for="text"></error-output>
 </div>
 
 <div class="row-content">
@@ -358,7 +365,7 @@ align-items: flex-start;
 <textarea id="notes" class="input" name="Notes" placeholder="" style="height: 100px"></textarea>
 </div>
 <div class="buttonParent">
-<a href= # class="resetButton button cancelButton">Cancel</a>
+<a href= "EmployeePayroll.html" class="resetButton button cancelButton">Cancel</a>
 <div class="submit-reset">
 <button type="submit" class="button submitButton" id="submitButton">Submit</button>
 <button type="reset" class="resetButton button">Reset</button>
