@@ -236,10 +236,10 @@ error-output {
         </div>
  </header>
 <div class="form-content">
-<form class="form" action="#" onreset="resetForm()" onsubmit="save()">
-<div class="form-head">Employee Payroll form </div>
+<form class="form"  onreset="resetForm()" onsubmit="save(); return false" >
+<div class="form-head">Employee Payroll form</div>
 <div class="row-content">
-<label class="label text"for="name">Name</label>
+<label class="label text" for="name">Name</label>
 <input class="input" type="text" id="name" name="name" placeholder="Your name. ." required>
 <error-output class="text-error" for="text"></error-output>
 </div>
@@ -252,8 +252,7 @@ error-output {
         <img class="profile" id='image1' src="Ellipse -1.png">
         </label>
         <label>
-        <input type="radio" id="profile2" name="profile"
-        value="Ellipse-2.png" required>       
+        <input type="radio" id="profile2" name="profile" value="Ellipse-2.png" required>       
         <img class="profile" id='image2' src="Ellipse -2.png">
         </label>
         <label>
@@ -376,8 +375,27 @@ error-output {
         var salaryOutput = document.querySelector(".salary-output");
         salaryOutput.textContent = salaryRange.value;
     }
+
+    function populateEmployeeData() {
+    let name = document.getElementById("name").value;
+    let profile = document.querySelector("input[name='profile']:checked").value;
+    let gender = document.querySelector("input[name='gender']:checked").value;
+    let departments = [];
+    let departmentCheckboxes = document.querySelectorAll("input[name='department']:checked");
+    departmentCheckboxes.forEach(function(checkbox) {
+      departments.push(checkbox.value);
+    });
+    let salary = document.getElementById("salary").value;
+    let startDate = document.getElementById("day").value + "-" + document.getElementById("month").value + "-" + document.getElementById("year").value;
+    let notes = document.getElementById("notes").value;
+    let employeeData = new EmployeePayrollData(name, profile, gender, departments, salary, startDate, notes);
+    if (employeeData.validateData()) {
+      console.log("Employee Data:", employeeData);
+    } else {
+      console.log("Validation Error: Invalid employee data");
+    }
+  }  
 </script>
-<script type="text/JavaScript" src="Employee.js"></script>
 <script type="text/JavaScript" src="EmployeePayrollData.js"></script>     
 </body>
 </html>
