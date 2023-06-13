@@ -1,14 +1,5 @@
 class EmployeePayrollData {
-    constructor(id, name, profile, gender, departments, salary, startDate, notes) {
-      this._id = id;
-      this._name = name;
-      this._profile = profile;
-      this._gender = gender;
-      this._departments = departments;
-      this._salary = salary;
-      this._startDate = startDate;
-      this._notes = notes;
-    }
+    
     get id() { return this._id; }
     set id(id) {
         this._id = id;
@@ -49,6 +40,11 @@ class EmployeePayrollData {
 
     get startDate() { return this._startDate; }
     set startDate(startDate) {
+        let now = new Date();
+        if (startDate > now) throw 'Start Date is a Future Date!';
+        var diff = Math.abs(now.getTime() - startDate.getTime());
+        if (diff / (1000 * 60 * 60 * 24) > 30)
+        throw 'Start Date is beyond 30 Days!';
         this._startDate = startDate;
     }
 
