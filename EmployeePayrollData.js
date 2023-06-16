@@ -1,3 +1,4 @@
+
 let isUpdate = false;
 let employeePayrollObj = {};
 
@@ -18,7 +19,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     const date = document.querySelector('#date');
     date.addEventListener('input', function() {
-        let startDate = getInputValueById('#day')+ " "+getInputValueById('#month')+ " "+
+        let startDate = getInputValueById('#day')+ " "+ getInputValueById('#month')+ " "+
                                             getInputValueById('#year');
         try {
             checkStartDate(new Date(Date.parse(startDate)));
@@ -43,12 +44,33 @@ const save = (event) => {
     event.stopPropagation();
     try {
         setEmployeePayrollObject();
+        if (site_properties.use_local_storage.match("true")) {
         createAndUpdateStorage();
         resetForm();
         window.location.replace(site_properties.home_page);
+        } else {
+            createOrUpdateEmployeePayroll();
+        }
     } catch (e) {
         return;
     }
+}
+
+const createOrUpdateEmployeePayroll = () => {
+    let postURL = site_properties.server_url;
+    let methodCall = "POST";
+    if(isUpdate) {
+        methodCall = "PUT";
+        postURL = postURL + employeePayrollObj.id.toString();
+    }
+    makeServiceCall(methodCall, postURL, true, employeePayrollObj)
+    .then(responseText => {
+            resetForm();
+            window.location.replace(site_properties.home_page);
+        })
+        .catch(error => {
+            throw error;
+        });
 }
 
 const setEmployeePayrollObject = () => {
@@ -68,7 +90,7 @@ const setEmployeePayrollObject = () => {
 
 const createAndUpdateStorage = () => {
     let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
-    if(employeePayrollList){
+    if(employeePayrollList) {
         let empPayrollData = employeePayrollList.
                             find(empData => empData.id == employeePayrollObj.id);
         if (!empPayrollData) {
@@ -136,7 +158,7 @@ const setForm = () => {
     setValue('#notes', employeePayrollObj._note);
     let date = stringifyDate(employeePayrollObj._startDate).split(" ");
     setValue('#day', date[0]);
-    setvalue('#month', date[1]);
+    setValue('#month', date[1]);
     setValue('#year', date[2]);
 }
 
@@ -195,4 +217,3 @@ const checkForUpdate = () => {
     employeePayrollObj = JSON.parse(employeePayrollJson);
     setForm();
 }
-    
